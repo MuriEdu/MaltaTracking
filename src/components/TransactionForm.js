@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
+import CurrencyInput from 'react-currency-input-field';
 
 const TransactionForm = ({ onAddTransaction }) => {
   const [text, setText] = useState('');
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState('');
   const [type, setType] = useState('expense');
 
   const onSubmit = e => {
@@ -22,7 +23,7 @@ const TransactionForm = ({ onAddTransaction }) => {
     onAddTransaction(newTransaction);
 
     setText('');
-    setAmount(0);
+    setAmount('');
   };
 
   return (
@@ -38,7 +39,19 @@ const TransactionForm = ({ onAddTransaction }) => {
             <input type="text" value={text} onChange={(e) => setText(e.target.value)} className="form-control" id="text" placeholder="Description" />
           </div>
           <div className="form-group">
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="form-control" id="amount" placeholder="Amount" />
+            <CurrencyInput
+              id="amount"
+              name="amount"
+              placeholder="Amount"
+              defaultValue={0}
+              decimalsLimit={2}
+              onValueChange={(value, name) => setAmount(value)}
+              prefix="R$ "
+              groupSeparator="."
+              decimalSeparator=","
+              className="form-control"
+              inputMode="decimal"
+            />
           </div>
           <button className="btn btn-primary btn-block mt-3">Add transaction</button>
         </form>
