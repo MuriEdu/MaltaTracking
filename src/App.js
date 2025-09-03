@@ -9,41 +9,14 @@ function App() {
   const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const getTransactions = async () => {
-      const transactionsFromServer = await fetchTransactions();
-      setTransactions(transactionsFromServer);
-    };
-
-    getTransactions();
-  }, []);
-
-  const fetchTransactions = async () => {
-    const res = await fetch('http://localhost:5001/transactions');
-    const data = await res.json();
-    return data;
-  };
-
-  const addTransaction = async (transaction) => {
-    const res = await fetch('http://localhost:5001/transactions', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(transaction),
-    });
-
-    const data = await res.json();
-
-    setTransactions([...transactions, data]);
+  const addTransaction = (transaction) => {
+    const id = Date.now(); // Simple unique ID generation
+    const newTransaction = { id, ...transaction };
+    setTransactions([...transactions, newTransaction]);
     setIsModalOpen(false);
   };
 
-  const deleteTransaction = async (id) => {
-    await fetch(`http://localhost:5001/transactions/${id}`, {
-      method: 'DELETE',
-    });
-
+  const deleteTransaction = (id) => {
     setTransactions(transactions.filter((transaction) => transaction.id !== id));
   };
 
